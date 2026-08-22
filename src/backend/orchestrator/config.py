@@ -1,6 +1,6 @@
 """
-Central configuration for the Evaluator-Generator platform.
-Loads everything from environment variables (.env) so no secrets are hardcoded.
+Central configuration for Redis caching & loop settings.
+LLM config lives in src/config/settings.py (Member 2).
 """
 import os
 from dataclasses import dataclass
@@ -14,13 +14,6 @@ def _int(name: str, default: int) -> int:
         return int(os.getenv(name, default))
     except (TypeError, ValueError):
         return default
-
-
-@dataclass(frozen=True)
-class LLMConfig:
-    api_key: str = os.getenv("OPENROUTER_API_KEY", "")
-    model_name: str = os.getenv("LLM_MODEL_NAME", "openai/gpt-oss-20b:free")
-    base_url: str = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
 
 
 @dataclass(frozen=True)
@@ -46,7 +39,6 @@ class LogConfig:
     file: str = os.getenv("LOG_FILE", "logs/app.log")
 
 
-LLM = LLMConfig()
 REDIS = RedisConfig()
 LOOP = LoopConfig()
 LOGGING = LogConfig()
