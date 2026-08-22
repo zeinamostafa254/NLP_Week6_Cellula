@@ -32,7 +32,7 @@ You are responsible for **Member 1's tasks**. We will build the Data Ingestion p
 ### Open Questions
 > [!IMPORTANT]
 > Please answer these questions so we can choose the right tools before writing the code:
-> 1. **Embeddings Model:** Do you want to use OpenAI embeddings (requires an API key) or a free local HuggingFace embedding model? *(I recommend HuggingFace so the project runs for free without keys).*
+> 1. **Embeddings Model:** Use the free local HuggingFace `BAAI/bge-m3` embedding model.
 > 2. **Speech-to-Text:** For WAV files, should we use the `SpeechRecognition` library (which uses Google's free API and is very fast) or a local `Whisper` model? *(I recommend SpeechRecognition for simplicity at this stage).*
 > 3. **Vector Store:** Are you okay with using `ChromaDB` as our local vector database?
 

@@ -40,6 +40,7 @@ from src.config.settings import (
     CHUNK_SIZE,
     CHUNK_OVERLAP,
     EMBEDDING_MODEL_NAME,
+    EMBEDDING_CACHE_DIR,
     TOP_K_RESULTS,
 )
 
@@ -52,7 +53,13 @@ logger = logging.getLogger(__name__)
 def get_embeddings():
     """Return the embedding model to use for vectorization."""
     # ---- Active: HuggingFace Embeddings (Free) ----
-    return HuggingFaceEmbeddings(model_name=EMBEDDING_MODEL_NAME)
+    embedding_options = {
+        "model_name": EMBEDDING_MODEL_NAME,
+        "model_kwargs": {"local_files_only": True},
+    }
+    if EMBEDDING_CACHE_DIR:
+        embedding_options["cache_folder"] = EMBEDDING_CACHE_DIR
+    return HuggingFaceEmbeddings(**embedding_options)
 
     # ---- Commented Out: OpenAI Embeddings (Requires OPENAI_API_KEY) ----
     # return OpenAIEmbeddings()

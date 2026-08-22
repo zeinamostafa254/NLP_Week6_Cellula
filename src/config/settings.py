@@ -21,7 +21,7 @@ llm = ChatOpenAI(
     model=LLM_MODEL_NAME,         
     base_url=OPENROUTER_BASE_URL,  
     api_key=OPENROUTER_API_KEY,    
-    temperature=0.0
+    temperature=0.1
 )
 
 # ============================================================
@@ -34,11 +34,12 @@ CHROMA_PERSIST_DIR = os.path.join(BASE_DIR, "chroma_db")
 DATA_DIR = os.path.join(BASE_DIR, "data")
 
 # Chunking
-CHUNK_SIZE = 1000
-CHUNK_OVERLAP = 100
+CHUNK_SIZE = 200
+CHUNK_OVERLAP = 50
 
 # Embedding model name (HuggingFace)
-EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
+EMBEDDING_MODEL_NAME = os.getenv("EMBEDDING_MODEL_NAME") or "BAAI/bge-m3"
+EMBEDDING_CACHE_DIR = os.getenv("EMBEDDING_CACHE_DIR")
 
 # Feedback loop
 MAX_FEEDBACK_ITERATIONS = 4
