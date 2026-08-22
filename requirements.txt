@@ -16,3 +16,5 @@ openai-whisper
 SpeechRecognition
 pydub
 wikipedia
+redis
+python-dotenv
