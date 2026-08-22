@@ -21,3 +21,5 @@ redis
 python-dotenv
 beautifulsoup4
 pydantic
+pytesseract
+Pillow

@@ -1,7 +1,7 @@
 """
 Knowledge Extraction, Embedding & Vector Store Logic
 =====================================================
-Handles: Document loading, audio transcription, text chunking,
+Handles: Document loading, audio transcription, image OCR, text chunking,
          embedding generation, and ChromaDB storage/retrieval.
 """
 
@@ -13,11 +13,15 @@ import whisper
 # import speech_recognition as sr   # Google SpeechRecognition (commented out)
 # from pydub import AudioSegment    # For audio conversion (commented out)
 
+import pytesseract
+from PIL import Image
+
 from langchain_core.documents import Document
 from langchain_community.document_loaders import (
     PyPDFLoader,
     Docx2txtLoader,
     TextLoader,
+    CSVLoader,
     UnstructuredPowerPointLoader,
     WebBaseLoader,
     WikipediaLoader,
@@ -94,6 +98,31 @@ def transcribe_audio_google(file_path: str) -> str:
 
 
 # ============================================================
+# Image OCR (Text Extraction from Images)
+# ============================================================
+
+IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".bmp", ".tiff", ".tif", ".webp"}
+
+
+def extract_text_from_image(file_path: str) -> str:
+    """
+    Extract text from an image using Tesseract OCR.
+    Supports PNG, JPG, JPEG, BMP, TIFF, WEBP.
+    """
+    logger.info(f"Extracting text from image with Tesseract: {file_path}")
+    try:
+        img = Image.open(file_path)
+        text = pytesseract.image_to_string(img)
+        text = text.strip()
+        if not text:
+            return "No text could be extracted from this image."
+        return text
+    except Exception as e:
+        logger.error(f"OCR failed for {file_path}: {e}")
+        return f"Error extracting text from image: {e}"
+
+
+# ============================================================
 # Document Loading
 # ============================================================
 
@@ -120,6 +149,10 @@ def load_document(file_path: str, filename: str) -> List[Document]:
         loader = TextLoader(file_path, encoding="utf-8")
         return loader.load()
 
+    elif ext == ".csv":
+        loader = CSVLoader(file_path, encoding="utf-8")
+        return loader.load()
+
     elif ext in CODE_EXTENSIONS:
         loader = TextLoader(file_path, encoding="utf-8")
         docs = loader.load()
@@ -140,6 +173,10 @@ def load_document(file_path: str, filename: str) -> List[Document]:
         # text = transcribe_audio_google(file_path)
 
         return [Document(page_content=text, metadata={"source": filename, "file_type": "audio"})]
+
+    elif ext in IMAGE_EXTENSIONS:
+        text = extract_text_from_image(file_path)
+        return [Document(page_content=text, metadata={"source": filename, "file_type": "image"})]
 
     else:
         raise ValueError(f"Unsupported file extension: '{ext}'.")

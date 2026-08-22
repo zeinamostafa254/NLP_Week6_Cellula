@@ -33,13 +33,14 @@ with st.sidebar:
 
     # ---- File Upload ----
     st.subheader("📁 Upload Files")
-    st.caption("Supported: PDF, DOCX, TXT, PPT/PPTX, Code, WAV/MP3/M4A")
+    st.caption("Supported: PDF, DOCX, TXT, CSV, PPT/PPTX, Code, WAV/MP3/M4A, Images (PNG/JPG/BMP/TIFF)")
 
     uploaded_files = st.file_uploader(
         "Choose files",
-        type=["pdf", "docx", "doc", "txt", "ppt", "pptx",
+        type=["pdf", "docx", "doc", "txt", "csv", "ppt", "pptx",
               "py", "js", "ts", "java", "cpp", "c", "h", "cs", "go", "rb", "rs",
-              "html", "css", "wav", "mp3", "m4a"],
+              "html", "css", "wav", "mp3", "m4a",
+              "png", "jpg", "jpeg", "bmp", "tiff", "tif", "webp"],
         accept_multiple_files=True,
         label_visibility="collapsed",
     )
